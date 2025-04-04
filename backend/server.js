@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 
+const inventoryProductRoutes = require('./routes/inventoryProduct.routes')
 
 const app = express();
 app.use(cors());
@@ -26,7 +27,8 @@ Connect()
         process.exit(1);
     });
 
-
+// Routes
+app.use('/api/products', inventoryProductRoutes)
 
 
 module.exports = app;
