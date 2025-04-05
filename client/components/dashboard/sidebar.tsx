@@ -8,13 +8,10 @@ import { usePathname } from "next/navigation";
 import {
   BarChart3,
   FileText,
-  Home,
   LayoutDashboard,
   Package,
   Receipt,
   Settings,
-  Store,
-  Truck,
   Users,
   ChevronDown,
   ChevronRight,
@@ -72,41 +69,6 @@ export function DashboardSidebar({ className }: SidebarProps) {
       icon: FileText,
       href: "/dashboard/invoices",
       active: pathname === "/dashboard/invoices",
-    },
-    {
-      label: "GST",
-      icon: Receipt,
-      href: "#",
-      key: "gst",
-      active: pathname.includes("/dashboard/gst"),
-      submenu: [
-        {
-          label: "E-Invoicing",
-          href: "/dashboard/gst/e-invoicing",
-          active: pathname === "/dashboard/gst/e-invoicing",
-        },
-        {
-          label: "E-Way Bill",
-          href: "/dashboard/gst/e-way-bill",
-          active: pathname === "/dashboard/gst/e-way-bill",
-        },
-        {
-          label: "GSTR Filing",
-          href: "/dashboard/gst/gstr-filing",
-          active: pathname === "/dashboard/gst/gstr-filing",
-        },
-        {
-          label: "GST Returns",
-          href: "/dashboard/gst/returns",
-          active: pathname === "/dashboard/gst/returns",
-        },
-      ],
-    },
-    {
-      label: "Sales",
-      icon: Store,
-      href: "/dashboard/sales",
-      active: pathname === "/dashboard/sales",
     },
     {
       label: "Reports",
