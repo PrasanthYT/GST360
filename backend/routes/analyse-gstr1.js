@@ -9,7 +9,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-pro",
+  model: "gemini-2.0-flash",
   systemInstruction: `You are a financial assistant specialized in GST (Goods and Services Tax) compliance.
 You will be given a JSON containing GSTR-1 data.
 Return ONLY a JSON with the following structure, and no other explanation or text:
@@ -125,18 +125,9 @@ ${JSON.stringify(formatted, null, 2)}
     const result = await chatSession.sendMessage(prompt);
     const text = result.response.text();
 
-    // Try parsing to make sure it’s valid JSON
-    let parsedJson;
-    try {
-      parsedJson = JSON.parse(text);
-    } catch (e) {
-      console.error("Invalid JSON returned from Gemini:", text);
-      return res.status(500).json({ error: 'AI response was not valid JSON.', raw: text });
-    }
-
     res.json({
       message: 'GSTR-1 analysis generated successfully',
-      analysis: parsedJson
+      analysis: text
     });
 
   } catch (error) {

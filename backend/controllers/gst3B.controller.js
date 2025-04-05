@@ -3,7 +3,8 @@ const POSTransaction = require('../models/posTransaction.model');
 
 exports.generateGSTR3B = async (req, res) => {
     try {
-      const { startDate, endDate } = req.query;
+      const startDate = "2025-04-01";
+      const endDate = "2025-04-20";
       
       // 1. Get all transactions in date range
       const transactions = await POSTransaction.find({
@@ -78,7 +79,7 @@ exports.generateGSTR3B = async (req, res) => {
 
       res.json({
         message: 'GSTR-3B report generated and saved successfully',
-        report: savedReport
+        data: savedReport
       });
     } catch (error) {
       res.status(500).json({ 

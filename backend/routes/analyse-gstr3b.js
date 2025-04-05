@@ -9,7 +9,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-pro",
+  model: "gemini-2.0-flash",
   systemInstruction: `You are a financial assistant specialized in GST (Goods and Services Tax) compliance.
 You will be given a JSON containing GSTR-1 data.
 Return ONLY a JSON with the following structure, and no other explanation or text:
@@ -53,62 +53,62 @@ const generationConfig = {
 };
 
 // Formatter function to convert GSTR1 data to AI-friendly structure
-function formatForAnalysis(gstr1Data) {
-  const b2b = gstr1Data.table4.flatMap(entry =>
-    entry.invoiceDetails.map(inv => ({
-      invoiceNumber: inv.invoiceNumber,
-      invoiceDate: inv.invoiceDate,
-      invoiceValue: inv.invoiceValue,
-      taxableValue: inv.taxableValue,
-      cgst: inv.centralTax,
-      sgst: inv.stateUtTax,
-      igst: inv.integratedTax,
-      placeOfSupply: inv.placeOfSupply,
-      receiverGSTIN: entry.supplierGSTIN
-    }))
-  );
+// function formatForAnalysis(gstr1Data) {
+//   const b2b = gstr1Data.table4.flatMap(entry =>
+//     entry.invoiceDetails.map(inv => ({
+//       invoiceNumber: inv.invoiceNumber,
+//       invoiceDate: inv.invoiceDate,
+//       invoiceValue: inv.invoiceValue,
+//       taxableValue: inv.taxableValue,
+//       cgst: inv.centralTax,
+//       sgst: inv.stateUtTax,
+//       igst: inv.integratedTax,
+//       placeOfSupply: inv.placeOfSupply,
+//       receiverGSTIN: entry.supplierGSTIN
+//     }))
+//   );
 
-  const b2cs = gstr1Data.table7.map(inv => ({
-    invoiceNumber: inv.invoiceNumber,
-    invoiceDate: inv.invoiceDate,
-    invoiceValue: inv.invoiceValue,
-    taxableValue: inv.taxableValue,
-    cgst: inv.centralTax,
-    sgst: inv.stateUtTax,
-    igst: inv.integratedTax,
-    placeOfSupply: inv.placeOfSupply
-  }));
+//   const b2cs = gstr1Data.table7.map(inv => ({
+//     invoiceNumber: inv.invoiceNumber,
+//     invoiceDate: inv.invoiceDate,
+//     invoiceValue: inv.invoiceValue,
+//     taxableValue: inv.taxableValue,
+//     cgst: inv.centralTax,
+//     sgst: inv.stateUtTax,
+//     igst: inv.integratedTax,
+//     placeOfSupply: inv.placeOfSupply
+//   }));
 
-  const summary = {
-    totalInvoices: b2b.length + b2cs.length,
-    totalTaxableValue: b2b.reduce((a, b) => a + b.taxableValue, 0) + b2cs.reduce((a, b) => a + b.taxableValue, 0),
-    totalIGST: b2b.reduce((a, b) => a + b.igst, 0) + b2cs.reduce((a, b) => a + b.igst, 0),
-    totalCGST: b2b.reduce((a, b) => a + b.cgst, 0) + b2cs.reduce((a, b) => a + b.cgst, 0),
-    totalSGST: b2b.reduce((a, b) => a + b.sgst, 0) + b2cs.reduce((a, b) => a + b.sgst, 0),
-    totalInvoiceValue: b2b.reduce((a, b) => a + b.invoiceValue, 0) + b2cs.reduce((a, b) => a + b.invoiceValue, 0)
-  };
+//   const summary = {
+//     totalInvoices: b2b.length + b2cs.length,
+//     totalTaxableValue: b2b.reduce((a, b) => a + b.taxableValue, 0) + b2cs.reduce((a, b) => a + b.taxableValue, 0),
+//     totalIGST: b2b.reduce((a, b) => a + b.igst, 0) + b2cs.reduce((a, b) => a + b.igst, 0),
+//     totalCGST: b2b.reduce((a, b) => a + b.cgst, 0) + b2cs.reduce((a, b) => a + b.cgst, 0),
+//     totalSGST: b2b.reduce((a, b) => a + b.sgst, 0) + b2cs.reduce((a, b) => a + b.sgst, 0),
+//     totalInvoiceValue: b2b.reduce((a, b) => a + b.invoiceValue, 0) + b2cs.reduce((a, b) => a + b.invoiceValue, 0)
+//   };
 
-  return {
-    gstin: gstr1Data.company.gstin,
-    returnPeriod: gstr1Data.filingPeriod,
-    summary,
-    b2b,
-    b2cs,
-    complianceFlags: {
-      gstMismatch: false,
-      missingInvoices: false
-    }
-  };
-}
+//   return {
+//     gstin: gstr1Data.company.gstin,
+//     returnPeriod: gstr1Data.filingPeriod,
+//     summary,
+//     b2b,
+//     b2cs,
+//     complianceFlags: {
+//       gstMismatch: false,
+//       missingInvoices: false
+//     }
+//   };
+// }
 
-router.post('/analyse-gstr1', async (req, res) => {
+router.post('/analyse-gstr3b', async (req, res) => {
   try {
     const { data } = req.body;
     if (!data) {
-      return res.status(400).json({ error: 'Missing GSTR-1 data in request body.' });
+      return res.status(400).json({ error: 'Missing GSTR-3B data in request body.' });
     }
 
-    const formatted = formatForAnalysis(data);
+    // const formatted = formatForAnalysis(data);
 
     const chatSession = model.startChat({
       generationConfig,
@@ -116,32 +116,23 @@ router.post('/analyse-gstr1', async (req, res) => {
     });
 
     const prompt = `
-Analyze the following GSTR-1 JSON and return ONLY a JSON output in the required format:
+Analyze the following GSTR-3B JSON and return ONLY a JSON output in the required format:
 \`\`\`json
-${JSON.stringify(formatted, null, 2)}
+${JSON.stringify(data, null, 2)}
 \`\`\`
 `;
 
     const result = await chatSession.sendMessage(prompt);
     const text = result.response.text();
 
-    // Try parsing to make sure it’s valid JSON
-    let parsedJson;
-    try {
-      parsedJson = JSON.parse(text);
-    } catch (e) {
-      console.error("Invalid JSON returned from Gemini:", text);
-      return res.status(500).json({ error: 'AI response was not valid JSON.', raw: text });
-    }
-
     res.json({
-      message: 'GSTR-1 analysis generated successfully',
-      analysis: parsedJson
+      message: 'GSTR-3B analysis generated successfully',
+      analysis: text
     });
 
   } catch (error) {
-    console.error('Error analyzing GSTR-1:', error);
-    res.status(500).json({ error: 'Failed to analyze GSTR-1' });
+    console.error('Error analyzing GSTR-3B:', error);
+    res.status(500).json({ error: 'Failed to analyze GSTR-3B' });
   }
 });
 
