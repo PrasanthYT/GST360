@@ -6,15 +6,17 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 
-
-
 const inventoryProductRoutes = require('./routes/inventoryProduct.routes')
 const userRoutes = require('./routes/user.routes')
 const gstinRoutes = require('./routes/gstin.routes')
 const gstr1Routes = require('./routes/gstr1');
+
 const analysegstr1 = require('./routes/analyse-gstr1')
 const gstr3bRoutes = require('./routes/analyse-gstr3bb')
 
+
+const posRoutes = require('./routes/posTransaction.routes')
+const gst3BRoutes = require('./routes/gst3B.routes')
 
 const app = express();
 app.use(cors());
@@ -42,6 +44,9 @@ app.use('/api', gstinRoutes)
 app.use('/api/generate-gstr1', gstr1Routes);
 app.use('/api',analysegstr1)
 app.use('/api',gstr3bRoutes)
+
+app.use('/api/pos', posRoutes);
+app.use('/api/gst', gst3BRoutes);
 
 
 
