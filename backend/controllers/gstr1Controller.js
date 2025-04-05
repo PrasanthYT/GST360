@@ -18,9 +18,9 @@ exports.generateGSTR1 = async (req, res) => {
 
     // Company details – change these values as per your configuration.
     const companyInfo = {
-      gstin: "COMPANY_GSTIN", // Replace with your company GSTIN
-      legalName: "Your Company Legal Name",
-      tradeName: "Your Company Trade Name"
+      gstin: "05ABNTY3290P8ZB", 
+      legalName: "Zara groups",
+      tradeName: "Zara private limited "
     };
 
     // Compute Aggregate Turnover from the product invoice values (here we use "mrp").

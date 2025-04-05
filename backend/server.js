@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const gstr1Routes = require('./routes/gstr1')
+const analyseroute = require('./routes/analyse-gstr1')
 
 
 const inventoryProductRoutes = require('./routes/inventoryProduct.routes')
@@ -32,6 +33,7 @@ Connect()
 // Routes
 app.use('/api/products', inventoryProductRoutes)
 app.use('/api/generate-gstr1', gstr1Routes);
+app.use('/api',analyseroute)
 
 
 
