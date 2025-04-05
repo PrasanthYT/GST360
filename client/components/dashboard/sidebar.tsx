@@ -16,6 +16,7 @@ import {
   ChevronDown,
   ChevronRight,
   ShoppingCart,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -71,22 +72,22 @@ export function DashboardSidebar({ className }: SidebarProps) {
       active: pathname === "/dashboard/invoices",
     },
     {
-      label: "Reports",
-      icon: BarChart3,
-      href: "/dashboard/reports",
-      active: pathname === "/dashboard/reports",
-    },
-    {
-      label: "Customers",
-      icon: Users,
-      href: "/dashboard/customers",
-      active: pathname === "/dashboard/customers",
-    },
-    {
       label: "Documents",
       icon: FileText,
       href: "/dashboard/documents",
       active: pathname === "/dashboard/documents",
+    },
+    {
+      label: "GST Compliance",
+      icon: Shield,
+      href: "/dashboard/gst-compliance",
+      active: pathname === "/dashboard/gst-compliance",
+    },
+    {
+      label: "Reports",
+      icon: BarChart3,
+      href: "/dashboard/reports",
+      active: pathname === "/dashboard/reports",
     },
     {
       label: "GSTN Management",

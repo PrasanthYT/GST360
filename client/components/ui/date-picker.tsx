@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/popover";
 
 interface DatePickerWithRangeProps {
-  date?: DateRangeType;
+  date?: DateRangeType | undefined;
   setDate?: (date: DateRangeType | undefined) => void;
   className?: string;
 }
@@ -71,6 +71,7 @@ function DatePickerWithRange({
             selected={selectedDate}
             onSelect={handleDateSelect}
             numberOfMonths={2}
+            className="border rounded-md"
           />
         </PopoverContent>
       </Popover>
