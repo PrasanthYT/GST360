@@ -56,12 +56,6 @@ export function DashboardSidebar({ className }: SidebarProps) {
       active: pathname === "/dashboard",
     },
     {
-      label: "Home",
-      icon: Home,
-      href: "/dashboard/home",
-      active: pathname === "/dashboard/home",
-    },
-    {
       label: "Inventory",
       icon: Package,
       href: "/dashboard/inventory",
@@ -72,6 +66,12 @@ export function DashboardSidebar({ className }: SidebarProps) {
       icon: ShoppingCart,
       href: "/dashboard/pos",
       active: pathname === "/dashboard/pos",
+    },
+    {
+      label: "Invoices",
+      icon: FileText,
+      href: "/dashboard/invoices",
+      active: pathname === "/dashboard/invoices",
     },
     {
       label: "GST",
@@ -109,12 +109,6 @@ export function DashboardSidebar({ className }: SidebarProps) {
       active: pathname === "/dashboard/sales",
     },
     {
-      label: "Purchases",
-      icon: Truck,
-      href: "/dashboard/purchases",
-      active: pathname === "/dashboard/purchases",
-    },
-    {
       label: "Reports",
       icon: BarChart3,
       href: "/dashboard/reports",
@@ -125,12 +119,6 @@ export function DashboardSidebar({ className }: SidebarProps) {
       icon: Users,
       href: "/dashboard/customers",
       active: pathname === "/dashboard/customers",
-    },
-    {
-      label: "Invoices",
-      icon: FileText,
-      href: "/dashboard/invoices",
-      active: pathname === "/dashboard/invoices",
     },
     {
       label: "Documents",
