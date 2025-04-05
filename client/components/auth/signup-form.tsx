@@ -14,44 +14,102 @@ export function SignupForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<Partial<SignupFormData>>({});
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
 
   const handleGSTNSubmit = async (gstin: string) => {
     setLoading(true);
+    setApiError("");
+  
     try {
-      // In a real app, this would be an API call to fetch GST details
-      // For demo purposes, we'll simulate a delay and return mock data
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Mock data
-      const gstDetails: GSTDetails = {
-        gstin,
-        tradeName: "ABC Enterprises",
-        legalName: "ABC Enterprises Private Limited",
-        address: "123 Business Park, Sector 5, Noida, Uttar Pradesh, 201301",
-        status: "Active",
-      };
-
-      setFormData((prev) => ({ ...prev, ...gstDetails }));
+      const response = await fetch("http://localhost:4000/api/gstn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ gstin }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok || !data || !data.gstNumber) {
+        throw new Error(data.message || "No GST details found for this number");
+      }
+  
+      setFormData((prev) => ({ ...prev, ...data }));
       setCurrentStep(2);
     } catch (error) {
       console.error("Error fetching GST details:", error);
+      setApiError(
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch GST details. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   const handleDetailsConfirm = () => {
     setCurrentStep(3);
   };
 
-  const handlePasswordSubmit = (password: string) => {
-    setFormData((prev) => ({ ...prev, password }));
-    // In a real app, this would submit the form data to your API
-    console.log("Form submitted:", { ...formData, password });
-
-    // Redirect to login or dashboard
-    router.push("/auth/login");
+  const handlePasswordSubmit = async (password: string) => {
+    setLoading(true);
+    try {
+      const completeFormData = { 
+        ...formData, 
+        password,
+        address: formData.address || {
+          bnm: "Not Available",
+          st: "Not Available",
+          loc: "Not Available",
+          bno: "Not Available",
+          stcd: "Not Available",
+          pncd: "Not Available"
+        }
+      };
+  
+      const response = await fetch("http://localhost:4000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: completeFormData.legalName,
+          gstNumber: completeFormData.gstNumber,
+          tradeName: completeFormData.tradeName,
+          legalName: completeFormData.legalName,
+          address: completeFormData.address,
+          status: completeFormData.status,
+          password: password,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+  
+      // Redirect after success
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setApiError(
+        error instanceof Error
+          ? error.message
+          : "Registration failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+  
+  
+  
 
   const steps = [
     { number: 1, title: "GSTN Verification" },
@@ -104,6 +162,12 @@ export function SignupForm() {
       </div>
 
       <Card className="p-6">
+        {apiError && (
+          <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">
+            {apiError}
+          </div>
+        )}
+        
         {currentStep === 1 && (
           <GSTNStep onSubmit={handleGSTNSubmit} loading={loading} />
         )}

@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 
 const inventoryProductRoutes = require('./routes/inventoryProduct.routes')
 const userRoutes = require('./routes/user.routes')
+const gstinRoutes = require('./routes/gstin.routes')
 
 const app = express();
 app.use(cors());
@@ -30,7 +31,8 @@ Connect()
 
 // Routes
 app.use('/api/products', inventoryProductRoutes)
-app.use('/api/auth', inventoryProductRoutes)
+app.use('/api/auth', userRoutes)
+app.use('/api', gstinRoutes)
 
 
 module.exports = app;

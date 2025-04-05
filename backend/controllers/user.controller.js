@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -10,34 +10,46 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
  */
 exports.registerUser = async (req, res) => {
   try {
-    const { name, gstNumber, tradeName, legalName, address, status, password } =
-      req.body;
+    const { name, gstNumber, tradeName, legalName, address, status, password } = req.body;
+
+    // Basic validation
+    if (!name || !gstNumber || !tradeName || !legalName || !password) {
+      return res.status(400).json({ message: "Required fields are missing" });
+    }
 
     // Check if user exists
     const userExists = await User.findOne({ gstNumber });
-    if (userExists)
+    if (userExists) {
       return res.status(400).json({ message: "User already exists" });
+    }
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create user
+    // Create user with default address if not provided
     const user = new User({
       name,
       gstNumber,
       tradeName,
       legalName,
-      address,
-      status,
+      address: address || {
+        bnm: "",
+        st: "",
+        loc: "",
+        bno: "",
+        stcd: "",
+        pncd: ""
+      },
+      status: status || "Active",
       password: hashedPassword,
     });
 
     await user.save();
-
     res.status(201).json({ message: "User registered successfully", user });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    console.error("Register error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
