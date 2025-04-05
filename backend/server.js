@@ -12,7 +12,7 @@ const gstinRoutes = require('./routes/gstin.routes')
 const gstr1Routes = require('./routes/gstr1');
 
 const analysegstr1 = require('./routes/analyse-gstr1')
-const gstr3bRoutes = require('./routes/analyse-gstr3bb')
+const gstr3bRoutes = require('./routes/analyse-gstr3b')
 
 
 const posRoutes = require('./routes/posTransaction.routes')
