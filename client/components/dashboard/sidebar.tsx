@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import {
   BarChart3,
   FileText,
+  Home,
   LayoutDashboard,
   Package,
   Receipt,
@@ -17,6 +18,7 @@ import {
   Users,
   ChevronDown,
   ChevronRight,
+  ShoppingCart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -54,10 +56,22 @@ export function DashboardSidebar({ className }: SidebarProps) {
       active: pathname === "/dashboard",
     },
     {
+      label: "Home",
+      icon: Home,
+      href: "/dashboard/home",
+      active: pathname === "/dashboard/home",
+    },
+    {
       label: "Inventory",
       icon: Package,
       href: "/dashboard/inventory",
       active: pathname === "/dashboard/inventory",
+    },
+    {
+      label: "POS",
+      icon: ShoppingCart,
+      href: "/dashboard/pos",
+      active: pathname === "/dashboard/pos",
     },
     {
       label: "GST",
@@ -111,6 +125,12 @@ export function DashboardSidebar({ className }: SidebarProps) {
       icon: Users,
       href: "/dashboard/customers",
       active: pathname === "/dashboard/customers",
+    },
+    {
+      label: "Invoices",
+      icon: FileText,
+      href: "/dashboard/invoices",
+      active: pathname === "/dashboard/invoices",
     },
     {
       label: "Documents",
