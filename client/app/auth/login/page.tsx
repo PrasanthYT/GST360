@@ -49,7 +49,7 @@ export default function LoginPage() {
     <form onSubmit={handleLogin}>
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="gstNumber">GST Number</Label>
+          <Label htmlFor="gstNumber">GST Number [Test GST number: 27AACCN0053F1ZW]</Label>
           <Input
             id="gstNumber"
             type="text"
@@ -62,7 +62,7 @@ export default function LoginPage() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password [Password: 12345678]</Label>
             <Link
               href="/auth/forgot-password"
               className="text-sm font-medium text-blue-600 hover:text-blue-500"

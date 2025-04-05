@@ -8,12 +8,12 @@ export default function SignupPage() {
       <SignupForm />
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
-          Already have an account?{" "}
+        Want to try with test credentials?{" "}
           <Link
             href="/auth/login"
             className="font-medium text-blue-600 hover:text-blue-500"
           >
-            Sign in
+            Test
           </Link>
         </p>
       </div>
