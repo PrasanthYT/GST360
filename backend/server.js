@@ -5,9 +5,12 @@ const { Connect, isConnected } = require("./db");
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+const gstr1Routes = require('./routes/gstr1')
 
-const inventoryProductRoutes = require('./routes/inventoryProduct.routes')
-const userRoutes = require('./routes/user.routes')
+
+const inventoryProductRoutes = require('./routes/inventoryProduct.routes');
+const userRoutes = require('./routes/user.routes');
+const gstr1Routes = require('./routes/gstr1');
 
 const app = express();
 app.use(cors());
@@ -30,7 +33,8 @@ Connect()
 
 // Routes
 app.use('/api/products', inventoryProductRoutes)
-app.use('/api/auth', inventoryProductRoutes)
+app.use('/api/generate-gstr1', gstr1Routes);
+app.use('/api/auth', userRoutes)
 
 
 module.exports = app;
