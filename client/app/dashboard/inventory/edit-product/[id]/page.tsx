@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { useInventory } from "@/contexts/inventory-context";
+import { BillOcrParser } from "@/components/inventory/bill-ocr-parser";
 
 export default function EditProductPage({
   params,
@@ -819,6 +820,12 @@ export default function EditProductPage({
 
         {/* Supplier Tab */}
         <TabsContent value="supplier" className="mt-6">
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <BillOcrParser />
+            </CardContent>
+          </Card>
+
           <Card>
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

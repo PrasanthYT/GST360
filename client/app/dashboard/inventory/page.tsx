@@ -17,6 +17,7 @@ import {
   BarChart3,
   Truck,
   RefreshCw,
+  FileText,
 } from "lucide-react";
 import { ProductList } from "@/components/inventory/product-list";
 import { ProductFilters } from "@/components/inventory/product-filters";
@@ -77,6 +78,13 @@ export default function InventoryPage() {
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Button onClick={handleAddProduct} className="gap-2">
             <Plus className="h-4 w-4" /> Add Product
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => router.push("/dashboard/inventory/bulk-import")}
+            className="gap-2"
+          >
+            <FileText className="h-4 w-4" /> Bulk Import
           </Button>
         </div>
       </div>
