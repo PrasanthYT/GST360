@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import {
   BarChart3,
   FileText,
-  Home,
   LayoutDashboard,
   Package,
   Receipt,
