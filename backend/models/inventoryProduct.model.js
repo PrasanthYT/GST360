@@ -58,7 +58,27 @@ const inventoryProductSchema = new mongoose.Schema({
   expiryDate: { type: Date },
 
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
+
+  salesData: {
+    totalSold: { type: Number, default: 0 },
+    totalRevenue: { type: Number, default: 0 },
+    totalTaxCollected: { 
+      cgst: { type: Number, default: 0 },
+      sgst: { type: Number, default: 0 },
+      igst: { type: Number, default: 0 }
+    },
+    salesHistory: [{
+      date: { type: Date, default: Date.now },
+      invoiceNumber: String,
+      quantity: Number,
+      price: Number,
+      taxableValue: Number,
+      cgstAmount: Number,
+      sgstAmount: Number,
+      igstAmount: Number
+    }]
+  }
 });
 
 // Profit margin and Tax Type
