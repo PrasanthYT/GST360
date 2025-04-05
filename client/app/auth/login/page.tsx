@@ -1,17 +1,65 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function LoginPage() {
+  const [gstNumber, setGstNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:4000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ gstNumber, password, rememberMe }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId);
+        router.push("/dashboard"); // Redirect after login
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
+    <form onSubmit={handleLogin}>
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="name@example.com" />
+          <Label htmlFor="gstNumber">GST Number</Label>
+          <Input
+            id="gstNumber"
+            type="text"
+            placeholder="22AAAAA0000A1Z5"
+            value={gstNumber}
+            onChange={(e) => setGstNumber(e.target.value)}
+            required
+          />
         </div>
+
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
@@ -22,10 +70,21 @@ export default function LoginPage() {
               Forgot password?
             </Link>
           </div>
-          <Input id="password" type="password" />
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
+
         <div className="flex items-center space-x-2">
-          <Checkbox id="remember" />
+          <Checkbox
+            id="remember"
+            checked={rememberMe}
+            onCheckedChange={(val) => setRememberMe(!!val)}
+          />
           <label
             htmlFor="remember"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -33,10 +92,12 @@ export default function LoginPage() {
             Remember me
           </label>
         </div>
-        <Button type="submit" className="w-full">
-          Sign in
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Signing in..." : "Sign in"}
         </Button>
       </div>
+
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -54,6 +115,6 @@ export default function LoginPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

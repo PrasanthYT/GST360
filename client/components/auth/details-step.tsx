@@ -25,7 +25,7 @@ export function DetailsStep({ details, onConfirm, onBack }: DetailsStepProps) {
           <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-blue-800">GSTN Verified</p>
-            <p className="text-sm text-blue-600">{details.gstin}</p>
+            <p className="text-sm text-blue-600">{details.gstNumber}</p>
           </div>
         </div>
 
@@ -42,7 +42,11 @@ export function DetailsStep({ details, onConfirm, onBack }: DetailsStepProps) {
 
           <div className="space-y-1 sm:col-span-2">
             <p className="text-sm font-medium text-gray-500">Address</p>
-            <p className="font-medium">{details.address}</p>
+            <p className="font-medium">
+  {details.address.bno}, {details.address.bnm}, {details.address.st},{" "}
+  {details.address.loc}, {details.address.stcd} - {details.address.pncd}
+</p>
+
           </div>
 
           <div className="space-y-1">

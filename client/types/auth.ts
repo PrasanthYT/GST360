@@ -1,5 +1,5 @@
 export interface GSTDetails {
-  gstin: string;
+  gstNumber: string;
   tradeName: string;
   legalName: string;
   address: string;
@@ -7,6 +7,6 @@ export interface GSTDetails {
 }
 
 export interface SignupFormData extends GSTDetails {
+  name: string;
   password: string;
-  confirmPassword: string;
 }
