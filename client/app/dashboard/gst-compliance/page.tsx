@@ -272,7 +272,7 @@ export default function GSTCompliancePage() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:4000/api/generate-gstr1/generate"
+        "https://gst360-n4ca.onrender.com/api/generate-gstr1/generate"
       );
       const data = await response.json();
       setGstr1Data(data);
@@ -289,7 +289,7 @@ export default function GSTCompliancePage() {
   const generateGSTR3B = async () => {
     setIsLoading3B(true);
     try {
-      const response = await fetch("http://localhost:4000/api/gst/3b");
+      const response = await fetch("https://gst360-n4ca.onrender.com/api/gst/3b");
       const data = await response.json();
       setGstr3bData(data);
 
@@ -310,7 +310,7 @@ export default function GSTCompliancePage() {
 
     setIsAnalyzing3B(true);
     try {
-      const response = await fetch("http://localhost:4000/api/analyse-gstr3b", {
+      const response = await fetch("https://gst360-n4ca.onrender.com/api/analyse-gstr3b", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -467,7 +467,7 @@ export default function GSTCompliancePage() {
 
     setIsAnalyzing(true);
     try {
-      const response = await fetch("http://localhost:4000/api/analyse-gstr1", {
+      const response = await fetch("https://gst360-n4ca.onrender.com/api/analyse-gstr1", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

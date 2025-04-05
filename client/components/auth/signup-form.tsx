@@ -22,7 +22,7 @@ export function SignupForm() {
     setApiError("");
   
     try {
-      const response = await fetch("http://localhost:4000/api/gstn", {
+      const response = await fetch("https://gst360-n4ca.onrender.com/api/gstn", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export function SignupForm() {
         }
       };
   
-      const response = await fetch("http://localhost:4000/api/auth/register", {
+      const response = await fetch("https://gst360-n4ca.onrender.com/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
