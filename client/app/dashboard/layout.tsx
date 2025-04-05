@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { CommandMenu } from "@/components/command-menu";
@@ -6,8 +8,11 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const { Toasts } = useToast();
+
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <DashboardSidebar />
@@ -30,6 +35,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
         </header>
         <main className="flex-1 p-6 md:p-8">{children}</main>
+        <Toasts />
       </div>
     </div>
   );
