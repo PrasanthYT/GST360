@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ShoppingCart, AlertTriangle } from "lucide-react";
+import { ShoppingCart, AlertTriangle, ImageOff } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/contexts/inventory-context";
@@ -15,10 +16,27 @@ export function CompactProductCard({
   product,
   onAddToCart,
 }: CompactProductCardProps) {
+  // Client-side state for image loading
+  const [imageError, setImageError] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Only run on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Determine stock status
   const isOutOfStock = product.quantity <= 0;
   const isLowStock =
     product.quantity > 0 && product.quantity <= product.reorderLevel;
+
+  // Default placeholder
+  const placeholderImage = "/placeholder.svg?height=80&width=80";
+
+  // Use placeholder if image fails to load
+  const imageUrl = imageError
+    ? placeholderImage
+    : product.images[0] || placeholderImage;
 
   return (
     <Card
@@ -33,12 +51,21 @@ export function CompactProductCard({
       <div className="flex h-full">
         {/* Product Image - Full height */}
         <div className="relative w-20 h-full flex-shrink-0 bg-muted">
-          <Image
-            src={product.images[0] || "/placeholder.svg?height=80&width=80"}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
+          {mounted ? (
+            <Image
+              src={imageUrl || "/placeholder.svg"}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="80px"
+              onError={() => setImageError(true)}
+              priority
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <ImageOff className="h-6 w-6 text-muted-foreground" />
+            </div>
+          )}
         </div>
 
         {/* Product Details - Centered content */}
@@ -50,6 +77,10 @@ export function CompactProductCard({
             <span className="text-sm font-bold whitespace-nowrap">
               ₹{product.mrp.toFixed(0)}
             </span>
+          </div>
+
+          <div className="text-xs text-muted-foreground mt-1">
+            SKU: {product.sku} | {product.category}
           </div>
 
           <div className="flex justify-between items-center w-full mt-2">

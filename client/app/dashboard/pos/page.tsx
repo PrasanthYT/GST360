@@ -10,6 +10,7 @@ import {
   Users,
   UserPlus,
   BarChart3,
+  Database,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +62,9 @@ export default function POSPage() {
   const [showReward, setShowReward] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [showCustomerSelect, setShowCustomerSelect] = useState(false);
+
+  // Add a debug section to show all available products
+  const [showDebug, setShowDebug] = useState(false);
 
   // Get unique categories from products
   const categories = [
@@ -260,6 +264,14 @@ export default function POSPage() {
                   {category.charAt(0).toUpperCase() + category.slice(1)}
                 </Button>
               ))}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowDebug(!showDebug)}
+                className="ml-auto"
+              >
+                {showDebug ? "Hide" : "Show"} All Products ({products.length})
+              </Button>
             </div>
           </div>
 
@@ -294,6 +306,35 @@ export default function POSPage() {
               )}
             </CardContent>
           </Card>
+
+          {showDebug && (
+            <Card className="mt-4">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Database className="h-5 w-5" />
+                  All Products in Inventory ({products.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-2">
+                  {products.map((product) => (
+                    <div key={product.id} className="p-2 border rounded-md">
+                      <div className="flex justify-between">
+                        <span className="font-medium">{product.name}</span>
+                        <span className="text-blue-600">
+                          ₹{product.mrp.toFixed(0)}
+                        </span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        SKU: {product.sku} | Category: {product.category} |
+                        Stock: {product.quantity}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Demand Insights Section - Below Products */}
           <Card>
