@@ -2,6 +2,7 @@
 
 import type React from "react";
 
+import type { FC } from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ import {
   Upload,
   Calculator,
   Info,
+  Package,
 } from "lucide-react";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -35,13 +37,14 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { useInventory } from "@/contexts/inventory-context";
-import { BillOcrParser } from "@/components/inventory/bill-ocr-parser";
 
-export default function EditProductPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface EditProductPageProps {
+  params: {
+    id: string;
+  };
+}
+
+const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
   const router = useRouter();
   const { toast } = useToast();
   const { getProduct, updateProduct } = useInventory();
@@ -411,11 +414,9 @@ export default function EditProductPage({
                     <div className="border-2 border-dashed rounded-lg p-6 text-center">
                       {formData.images && formData.images.length > 0 ? (
                         <div className="flex flex-col items-center gap-2">
-                          <img
-                            src={formData.images[0] || "/placeholder.svg"}
-                            alt={formData.name}
-                            className="h-32 w-32 object-contain rounded-md border"
-                          />
+                          <div className="h-32 w-32 bg-gray-100 rounded-md border flex items-center justify-center">
+                            <Package className="h-16 w-16 text-gray-400" />
+                          </div>
                           <Button variant="outline" size="sm" className="mt-2">
                             <Trash2 className="mr-2 h-4 w-4" /> Remove
                           </Button>
@@ -820,12 +821,6 @@ export default function EditProductPage({
 
         {/* Supplier Tab */}
         <TabsContent value="supplier" className="mt-6">
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <BillOcrParser />
-            </CardContent>
-          </Card>
-
           <Card>
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -943,4 +938,6 @@ export default function EditProductPage({
       </Tabs>
     </div>
   );
-}
+};
+
+export default EditProductPage;
