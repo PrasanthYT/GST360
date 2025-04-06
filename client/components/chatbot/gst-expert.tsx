@@ -43,206 +43,6 @@ export function GSTExpert() {
     }
   }, [isOpen])
 
-  // Simulate Gemini AI behavior with the training data from file 2
-  const taxationTrainingData = [
-    {
-      question: "What is GST?",
-      answer: "GST (Goods and Services Tax) is a unified indirect tax system in India that replaced multiple taxes like VAT, service tax, and excise duty.",
-    },
-    {
-      question: "How many types of GST are there?",
-      answer: "There are four types: CGST, SGST, IGST, and UTGST.",
-    },
-    {
-      question: "What is the GST rate in India?",
-      answer: "GST rates are 0%, 5%, 12%, 18%, and 28% depending on the item or service.",
-    },
-    {
-      question: "Who needs to register for GST?",
-      answer: "Businesses with turnover above ₹40 lakh (₹20 lakh for services) must register. It's ₹20 lakh/₹10 lakh for special category states.",
-    },
-    {
-      question: "What is GSTIN?",
-      answer: "GSTIN is a 15-digit unique identification number assigned to a registered taxpayer under GST.",
-    },
-    {
-      question: "What is the threshold limit for GST registration?",
-      answer: "₹40 lakh for goods and ₹20 lakh for services. ₹20 lakh and ₹10 lakh for special states.",
-    },
-    {
-      question: "Is GST registration free?",
-      answer: "Yes, GST registration on the GST portal is completely free of cost.",
-    },
-    {
-      question: "What is the HSN code?",
-      answer: "HSN (Harmonized System of Nomenclature) code is used to classify goods under GST.",
-    },
-    {
-      question: "What is the SAC code?",
-      answer: "SAC (Services Accounting Code) is used to classify services under GST.",
-    },
-    {
-      question: "What is exempt from GST?",
-      answer: "Essential goods like milk, fruits, vegetables, education services, and healthcare are exempt.",
-    },
-    {
-      question: "How to register for GST online?",
-      answer: "Visit gst.gov.in, go to 'Services' > 'Registration' > 'New Registration', and follow the steps.",
-    },
-    {
-      question: "What are the documents required for GST registration?",
-      answer: "PAN, Aadhaar, address proof, bank details, and photographs of key persons.",
-    },
-    {
-      question: "What is GSTR-1?",
-      answer: "It is a return for reporting details of outward supplies of goods and services.",
-    },
-    {
-      question: "What is GSTR-3B?",
-      answer: "GSTR-3B is a monthly summary return of inward and outward supplies, and tax liability.",
-    },
-    {
-      question: "When to file GSTR-1?",
-      answer: "Monthly by the 11th of the next month or quarterly depending on turnover.",
-    },
-    {
-      question: "When to file GSTR-3B?",
-      answer: "Usually by the 20th of the next month.",
-    },
-    {
-      question: "What is the composition scheme in GST?",
-      answer: "It's for small businesses with turnover up to ₹1.5 crore to pay tax at a fixed rate with less compliance.",
-    },
-    {
-      question: "Can I cancel my GST registration?",
-      answer: "Yes, you can apply for cancellation on the GST portal with a valid reason.",
-    },
-    {
-      question: "What is ARN in GST?",
-      answer: "ARN (Application Reference Number) is generated after submission of GST registration or amendment request.",
-    },
-    {
-      question: "How to check GST return filing status?",
-      answer: "Log in to gst.gov.in and go to 'Services' > 'Returns' > 'Track Return Status'.",
-    },
-    {
-      question: "What is Input Tax Credit (ITC)?",
-      answer: "ITC is the credit on input taxes paid on purchases used for business. It can be used to offset output tax liability.",
-    },
-    {
-      question: "Can I claim ITC on capital goods?",
-      answer: "Yes, if used for business purposes and not restricted under Section 17(5).",
-    },
-    {
-      question: "What are taxes?",
-      answer: "Taxes are mandatory financial charges imposed by the government on individuals or businesses to fund public services and infrastructure.",
-    },
-    {
-      question: "What is income tax?",
-      answer: "Income tax is a direct tax paid by individuals and businesses on their earned income based on applicable tax slabs in India.",
-    },
-    {
-      question: "What is GSTR-9?",
-      answer: "GSTR-9 is the annual return to be filed by regular taxpayers under GST.",
-    },
-    {
-      question: "Who needs to file GSTR-9C?",
-      answer: "Taxpayers with turnover above ₹5 crore need to file GSTR-9C – a reconciliation statement.",
-    },
-    {
-      question: "What is reverse charge mechanism?",
-      answer: "In RCM, the recipient of goods/services pays the GST instead of the supplier.",
-    },
-    {
-      question: "What is the QRMP scheme?",
-      answer: "Quarterly Return Filing and Monthly Payment scheme for taxpayers with turnover up to ₹5 crore.",
-    },
-    {
-      question: "What is GSTR-2B?",
-      answer: "Auto-drafted ITC statement generated for buyers from suppliers' GSTR-1, 5, 6.",
-    },
-    {
-      question: "Is Aadhaar authentication mandatory for GST?",
-      answer: "Yes, for new registrations and certain amendments, Aadhaar authentication is required.",
-    },
-    {
-      question: "Can a person have multiple GST registrations?",
-      answer: "Yes, for different states or business verticals in the same state.",
-    },
-    {
-      question: "What are the best ways to legally reduce tax liability?",
-      answer: "Taxpayers can reduce tax liability by utilizing deductions under Section 80C, 80D, 80E, investing in tax-saving instruments, and optimizing salary components.",
-    }
-  ]
-
-  // Simple NLP function to find the best match for a user query
-  const findBestAnswer = (query: string) => {
-    // Normalize query (lowercase, remove extra spaces)
-    const normalizedQuery = query.toLowerCase().trim()
-    
-    // First check for keyword matches
-    if (!normalizedQuery || normalizedQuery.length < 2) {
-      return "Please ask a question about GST or taxation in India."
-    }
-    
-    // Check if the query is not tax-related
-    const nonTaxKeywords = ["hello", "hi", "hey", "your name", "how are you", "weather", "sports", "movies", "food"]
-    if (nonTaxKeywords.some(keyword => normalizedQuery.includes(keyword))) {
-      return "I'm trained only to answer questions related to taxation in India. Please ask something related to tax or GST."
-    }
-    
-    // Check for direct keyword matches first
-    const keywordMatches = {
-      "gst": "GST (Goods and Services Tax) is a unified indirect tax system in India that replaced multiple taxes like VAT, service tax, and excise duty.",
-      "tax": "Taxes are mandatory financial charges imposed by the government on individuals or businesses to fund public services and infrastructure.",
-      "itc": "ITC is the credit on input taxes paid on purchases used for business. It can be used to offset output tax liability.",
-      "input tax credit": "ITC is the credit on input taxes paid on purchases used for business. It can be used to offset output tax liability.",
-    }
-    
-    for (const [keyword, answer] of Object.entries(keywordMatches)) {
-      if (normalizedQuery === keyword || normalizedQuery.includes(keyword)) {
-        return answer
-      }
-    }
-    
-    // Try to find the best match from training data
-    let bestMatch = null
-    let highestScore = -1
-    
-    for (const item of taxationTrainingData) {
-      // Calculate a simple relevance score
-      const score = calculateRelevanceScore(normalizedQuery, item.question.toLowerCase())
-      
-      if (score > highestScore) {
-        highestScore = score
-        bestMatch = item.answer
-      }
-    }
-    
-    // Return the best match if score is above threshold, otherwise default response
-    return highestScore > 0.2 
-      ? bestMatch 
-      : "I'm trained only to answer questions related to taxation in India. Please ask something related to tax or GST."
-  }
-  
-  // Simple function to calculate relevance score between query and potential answer
-  const calculateRelevanceScore = (query: string, question: string) => {
-    // Split into words
-    const queryWords = query.split(/\s+/)
-    const questionWords = question.split(/\s+/)
-    
-    // Count matching words
-    let matchCount = 0
-    for (const word of queryWords) {
-      if (word.length > 2 && questionWords.includes(word)) {
-        matchCount++
-      }
-    }
-    
-    // Calculate score based on matches and query length
-    return matchCount / Math.max(queryWords.length, questionWords.length)
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isLoading) return
@@ -253,18 +53,30 @@ export function GSTExpert() {
     setIsLoading(true)
 
     try {
-      // Simulate API delay
-      setTimeout(() => {
-        const response = findBestAnswer(userMessage)
-        setMessages((prev) => [...prev, { role: "assistant", content: response }])
-        setIsLoading(false)
-      }, 1000)
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          history: messages
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      const data = await response.json();
+      setMessages((prev) => [...prev, { role: "assistant", content: data.message }])
     } catch (error) {
       console.error("Error getting response:", error)
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: "Sorry, I encountered an error. Please try again later." },
       ])
+    } finally {
       setIsLoading(false)
     }
   }
@@ -295,8 +107,8 @@ export function GSTExpert() {
               </Button>
             </div>
 
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
+            <ScrollArea className="flex-1 overflow-y-auto">
+              <div className="p-4 space-y-4">
                 {messages.map((message, i) => (
                   <div key={i} className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}>
                     <div
