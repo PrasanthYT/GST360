@@ -53,6 +53,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { DateRange } from "react-day-picker";
 
 // Dummy data for charts
 const salesData = [
@@ -117,7 +118,7 @@ const customerGrowthData = [
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export default function ReportsPage() {
-  const [dateRange, setDateRange] = useState({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: new Date(2023, 0, 1),
     to: new Date(),
   });
