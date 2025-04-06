@@ -1,59 +1,31 @@
-"use client";
+"use client"
 
-import type React from "react";
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ArrowLeft, Save, Plus, Trash2, Upload, Calculator, Info, Package } from 'lucide-react'
+import { DatePicker } from "@/components/ui/date-picker"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useToast } from "@/hooks/use-toast"
+import { useInventory } from "@/contexts/inventory-context"
 
-import type { FC } from "react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ArrowLeft,
-  Save,
-  Plus,
-  Trash2,
-  Upload,
-  Calculator,
-  Info,
-  Package,
-} from "lucide-react";
-import { DatePicker } from "@/components/ui/date-picker";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast";
-import { useInventory } from "@/contexts/inventory-context";
-
-interface EditProductPageProps {
-  params: {
-    id: string;
-  };
-}
-
-const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const { getProduct, updateProduct } = useInventory();
-  const productId = params.id;
+export default function EditProductPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
+  const { toast } = useToast()
+  const { getProduct, updateProduct } = useInventory()
+  const productId = params.id
 
   // Get product from context
-  const product = getProduct(productId);
+  const product = getProduct(productId)
 
-  const [activeTab, setActiveTab] = useState("basic");
+  const [activeTab, setActiveTab] = useState("basic")
   const [formData, setFormData] = useState(
     product || {
       name: "",
@@ -84,28 +56,27 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
       igstRate: 0,
       cgstRate: 0,
       sgstRate: 0,
-    }
-  );
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    },
+  )
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // If product not found, redirect to inventory page
   useEffect(() => {
     if (!product) {
-      router.push("/dashboard/inventory");
+      router.push("/dashboard/inventory")
     } else {
-      setFormData(product);
+      setFormData(product)
     }
-  }, [product, router]);
+  }, [product, router])
 
   // Update profit margin when mrp or costPrice changes
   useEffect(() => {
     if (formData.costPrice > 0) {
-      const profitMargin =
-        ((formData.mrp - formData.costPrice) / formData.costPrice) * 100;
-      setFormData((prev) => ({ ...prev, profitMargin }));
+      const profitMargin = ((formData.mrp - formData.costPrice) / formData.costPrice) * 100
+      setFormData((prev) => ({ ...prev, profitMargin }))
     }
-  }, [formData.mrp, formData.costPrice]);
+  }, [formData.mrp, formData.costPrice])
 
   // Update GST rates when totalGstRate changes
   useEffect(() => {
@@ -115,83 +86,74 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
         igstRate: prev.totalGstRate,
         cgstRate: 0,
         sgstRate: 0,
-      }));
+      }))
     } else {
       setFormData((prev) => ({
         ...prev,
         igstRate: 0,
         cgstRate: prev.totalGstRate / 2,
         sgstRate: prev.totalGstRate / 2,
-      }));
+      }))
     }
-  }, [formData.totalGstRate, formData.isInterState]);
+  }, [formData.totalGstRate, formData.isInterState])
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target
 
     if (type === "number") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: Number.parseFloat(value) || 0,
-      }));
+      setFormData((prev) => ({ ...prev, [name]: Number.parseFloat(value) || 0 }))
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
     // Clear error when field is edited
     if (errors[name]) {
       setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
+        const newErrors = { ...prev }
+        delete newErrors[name]
+        return newErrors
+      })
     }
-  };
+  }
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }))
 
     // Clear error when field is edited
     if (errors[name]) {
       setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
+        const newErrors = { ...prev }
+        delete newErrors[name]
+        return newErrors
+      })
     }
-  };
+  }
 
   const handleSwitchChange = (name: string, checked: boolean) => {
-    setFormData((prev) => ({ ...prev, [name]: checked }));
-  };
+    setFormData((prev) => ({ ...prev, [name]: checked }))
+  }
 
   const handleDateChange = (name: string, date: Date | undefined) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: date ? date.toISOString() : null,
-    }));
-  };
+    setFormData((prev) => ({ ...prev, [name]: date ? date.toISOString() : null }))
+  }
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     // Basic info validation
-    if (!formData.name.trim()) newErrors.name = "Product name is required";
-    if (!formData.sku.trim()) newErrors.sku = "SKU is required";
+    if (!formData.name.trim()) newErrors.name = "Product name is required"
+    if (!formData.sku.trim()) newErrors.sku = "SKU is required"
 
     // Pricing validation
-    if (formData.mrp <= 0) newErrors.mrp = "MRP must be greater than 0";
-    if (formData.costPrice <= 0)
-      newErrors.costPrice = "Cost price must be greater than 0";
+    if (formData.mrp <= 0) newErrors.mrp = "MRP must be greater than 0"
+    if (formData.costPrice <= 0) newErrors.costPrice = "Cost price must be greater than 0"
 
     // GST validation
-    if (!formData.hsnCode.trim()) newErrors.hsnCode = "HSN code is required";
+    if (!formData.hsnCode.trim()) newErrors.hsnCode = "HSN code is required"
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSave = async () => {
     if (!validateForm()) {
@@ -199,38 +161,38 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
         title: "Validation Error",
         description: "Please fix the errors in the form.",
         variant: "destructive",
-      });
-      return;
+      })
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
       // Update the product
-      updateProduct(productId, formData);
+      updateProduct(productId, formData)
 
       toast({
         title: "Product Updated",
         description: "The product has been updated successfully.",
         variant: "success",
-      });
+      })
 
-      router.push("/dashboard/inventory");
+      router.push("/dashboard/inventory")
     } catch (error) {
-      console.error("Error updating product:", error);
+      console.error("Error updating product:", error)
       toast({
         title: "Error",
         description: "Failed to update the product. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const handleCancel = () => {
-    router.push("/dashboard/inventory");
-  };
+    router.push("/dashboard/inventory")
+  }
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in-50 duration-500">
@@ -242,18 +204,10 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
           <h1 className="text-2xl font-bold tracking-tight">Edit Product</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={handleCancel}
-            disabled={isSubmitting}
-          >
+          <Button variant="outline" onClick={handleCancel} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button
-            onClick={handleSave}
-            className="gap-2"
-            disabled={isSubmitting}
-          >
+          <Button onClick={handleSave} className="gap-2" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -286,11 +240,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                   <div className="space-y-2">
                     <Label htmlFor="name">
                       Product Name <span className="text-red-500">*</span>
-                      {errors.name && (
-                        <span className="text-red-500 text-xs ml-2">
-                          {errors.name}
-                        </span>
-                      )}
+                      {errors.name && <span className="text-red-500 text-xs ml-2">{errors.name}</span>}
                     </Label>
                     <Input
                       id="name"
@@ -319,21 +269,15 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                       <Label htmlFor="category">Category</Label>
                       <Select
                         value={formData.category}
-                        onValueChange={(value) =>
-                          handleSelectChange("category", value)
-                        }
+                        onValueChange={(value) => handleSelectChange("category", value)}
                       >
                         <SelectTrigger id="category">
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Electronics">
-                            Electronics
-                          </SelectItem>
+                          <SelectItem value="Electronics">Electronics</SelectItem>
                           <SelectItem value="Furniture">Furniture</SelectItem>
-                          <SelectItem value="Office Supplies">
-                            Office Supplies
-                          </SelectItem>
+                          <SelectItem value="Office Supplies">Office Supplies</SelectItem>
                           <SelectItem value="Software">Software</SelectItem>
                           <SelectItem value="Stationery">Stationery</SelectItem>
                         </SelectContent>
@@ -342,12 +286,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
 
                     <div className="space-y-2">
                       <Label htmlFor="brand">Brand</Label>
-                      <Select
-                        value={formData.brand}
-                        onValueChange={(value) =>
-                          handleSelectChange("brand", value)
-                        }
-                      >
+                      <Select value={formData.brand} onValueChange={(value) => handleSelectChange("brand", value)}>
                         <SelectTrigger id="brand">
                           <SelectValue placeholder="Select brand" />
                         </SelectTrigger>
@@ -368,11 +307,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <div className="space-y-2">
                       <Label htmlFor="sku">
                         SKU <span className="text-red-500">*</span>
-                        {errors.sku && (
-                          <span className="text-red-500 text-xs ml-2">
-                            {errors.sku}
-                          </span>
-                        )}
+                        {errors.sku && <span className="text-red-500 text-xs ml-2">{errors.sku}</span>}
                       </Label>
                       <Input
                         id="sku"
@@ -386,12 +321,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
 
                     <div className="space-y-2">
                       <Label htmlFor="uom">Unit of Measure</Label>
-                      <Select
-                        value={formData.uom}
-                        onValueChange={(value) =>
-                          handleSelectChange("uom", value)
-                        }
-                      >
+                      <Select value={formData.uom} onValueChange={(value) => handleSelectChange("uom", value)}>
                         <SelectTrigger id="uom">
                           <SelectValue placeholder="Select UOM" />
                         </SelectTrigger>
@@ -424,9 +354,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                       ) : (
                         <div className="flex flex-col items-center gap-2">
                           <Upload className="h-8 w-8 text-muted-foreground" />
-                          <p className="text-sm text-muted-foreground">
-                            Drag & drop images here or click to browse
-                          </p>
+                          <p className="text-sm text-muted-foreground">Drag & drop images here or click to browse</p>
                           <Button variant="outline" size="sm" className="mt-2">
                             <Plus className="mr-2 h-4 w-4" /> Add Images
                           </Button>
@@ -438,9 +366,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
               </div>
 
               <div className="flex justify-end mt-6">
-                <Button onClick={() => setActiveTab("pricing")}>
-                  Continue to Pricing & GST
-                </Button>
+                <Button onClick={() => setActiveTab("pricing")}>Continue to Pricing & GST</Button>
               </div>
             </CardContent>
           </Card>
@@ -458,11 +384,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <div className="space-y-2">
                       <Label htmlFor="mrp">
                         MRP (₹) <span className="text-red-500">*</span>
-                        {errors.mrp && (
-                          <span className="text-red-500 text-xs ml-2">
-                            {errors.mrp}
-                          </span>
-                        )}
+                        {errors.mrp && <span className="text-red-500 text-xs ml-2">{errors.mrp}</span>}
                       </Label>
                       <Input
                         id="mrp"
@@ -478,11 +400,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <div className="space-y-2">
                       <Label htmlFor="costPrice">
                         Cost Price (₹) <span className="text-red-500">*</span>
-                        {errors.costPrice && (
-                          <span className="text-red-500 text-xs ml-2">
-                            {errors.costPrice}
-                          </span>
-                        )}
+                        {errors.costPrice && <span className="text-red-500 text-xs ml-2">{errors.costPrice}</span>}
                       </Label>
                       <Input
                         id="costPrice"
@@ -529,11 +447,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <div className="space-y-2">
                       <Label htmlFor="hsnCode">
                         HSN Code <span className="text-red-500">*</span>
-                        {errors.hsnCode && (
-                          <span className="text-red-500 text-xs ml-2">
-                            {errors.hsnCode}
-                          </span>
-                        )}
+                        {errors.hsnCode && <span className="text-red-500 text-xs ml-2">{errors.hsnCode}</span>}
                       </Label>
                       <div className="relative">
                         <Input
@@ -546,11 +460,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                         />
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute right-0 top-0 h-full w-8"
-                            >
+                            <Button variant="ghost" size="icon" className="absolute right-0 top-0 h-full w-8">
                               <Info className="h-4 w-4 text-muted-foreground" />
                             </Button>
                           </PopoverTrigger>
@@ -558,9 +468,8 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                             <div className="space-y-2">
                               <h4 className="font-medium">HSN Code</h4>
                               <p className="text-sm text-muted-foreground">
-                                Harmonized System of Nomenclature (HSN) code is
-                                a 6-digit uniform code that classifies goods for
-                                taxation purposes.
+                                Harmonized System of Nomenclature (HSN) code is a 6-digit uniform code that classifies
+                                goods for taxation purposes.
                               </p>
                               <a
                                 href="https://cbic-gst.gov.in/gst-goods-services-rates.html"
@@ -582,9 +491,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                       </Label>
                       <Select
                         value={formData.totalGstRate.toString()}
-                        onValueChange={(value) =>
-                          handleSelectChange("totalGstRate", value)
-                        }
+                        onValueChange={(value) => handleSelectChange("totalGstRate", value)}
                       >
                         <SelectTrigger id="gstRate">
                           <SelectValue placeholder="Select GST Rate" />
@@ -605,9 +512,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                       <Switch
                         id="gstIncluded"
                         checked={formData.gstIncluded}
-                        onCheckedChange={(checked) =>
-                          handleSwitchChange("gstIncluded", checked)
-                        }
+                        onCheckedChange={(checked) => handleSwitchChange("gstIncluded", checked)}
                       />
                       <Label htmlFor="gstIncluded">GST Included in Price</Label>
                     </div>
@@ -616,31 +521,20 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                       <Switch
                         id="isInterState"
                         checked={formData.isInterState}
-                        onCheckedChange={(checked) =>
-                          handleSwitchChange("isInterState", checked)
-                        }
+                        onCheckedChange={(checked) => handleSwitchChange("isInterState", checked)}
                       />
-                      <Label htmlFor="isInterState">
-                        Inter-State Supply (IGST)
-                      </Label>
+                      <Label htmlFor="isInterState">Inter-State Supply (IGST)</Label>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="taxType">Tax Type</Label>
-                      <Select
-                        value={formData.taxType}
-                        onValueChange={(value) =>
-                          handleSelectChange("taxType", value)
-                        }
-                      >
+                      <Select value={formData.taxType} onValueChange={(value) => handleSelectChange("taxType", value)}>
                         <SelectTrigger id="taxType">
                           <SelectValue placeholder="Select Tax Type" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Regular">Regular</SelectItem>
-                          <SelectItem value="Composition">
-                            Composition
-                          </SelectItem>
+                          <SelectItem value="Composition">Composition</SelectItem>
                           <SelectItem value="Exempt">Exempt</SelectItem>
                           <SelectItem value="Nil-Rated">Nil Rated</SelectItem>
                           <SelectItem value="Non-GST">Non-GST</SelectItem>
@@ -655,9 +549,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                 <Button variant="outline" onClick={() => setActiveTab("basic")}>
                   Back to Basic Info
                 </Button>
-                <Button onClick={() => setActiveTab("inventory")}>
-                  Continue to Inventory
-                </Button>
+                <Button onClick={() => setActiveTab("inventory")}>Continue to Inventory</Button>
               </div>
             </CardContent>
           </Card>
@@ -698,9 +590,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="warehouseLocation">
-                      Warehouse Location
-                    </Label>
+                    <Label htmlFor="warehouseLocation">Warehouse Location</Label>
                     <Input
                       id="warehouseLocation"
                       name="warehouseLocation"
@@ -725,14 +615,8 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <div className="space-y-2">
                       <Label htmlFor="expiryDate">Expiry Date</Label>
                       <DatePicker
-                        date={
-                          formData.expiryDate
-                            ? new Date(formData.expiryDate)
-                            : undefined
-                        }
-                        onDateChange={(date) =>
-                          handleDateChange("expiryDate", date)
-                        }
+                        date={formData.expiryDate ? new Date(formData.expiryDate) : undefined}
+                        onDateChange={(date) => handleDateChange("expiryDate", date)}
                       />
                     </div>
                   </div>
@@ -745,9 +629,7 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <Label>Stock Alerts</Label>
                     <div className="flex items-center space-x-2 pt-2">
                       <Switch id="lowStockAlert" defaultChecked />
-                      <Label htmlFor="lowStockAlert">
-                        Enable low stock alerts
-                      </Label>
+                      <Label htmlFor="lowStockAlert">Enable low stock alerts</Label>
                     </div>
                   </div>
 
@@ -755,24 +637,17 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                     <Label>Stock Visibility</Label>
                     <div className="flex items-center space-x-2 pt-2">
                       <Switch id="showStock" defaultChecked />
-                      <Label htmlFor="showStock">
-                        Show stock status to customers
-                      </Label>
+                      <Label htmlFor="showStock">Show stock status to customers</Label>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-between mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab("pricing")}
-                >
+                <Button variant="outline" onClick={() => setActiveTab("pricing")}>
                   Back to Pricing & GST
                 </Button>
-                <Button onClick={() => setActiveTab("variants")}>
-                  Continue to Variants
-                </Button>
+                <Button onClick={() => setActiveTab("variants")}>Continue to Variants</Button>
               </div>
             </CardContent>
           </Card>
@@ -791,12 +666,9 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                 </div>
 
                 <div className="border rounded-lg p-6 text-center">
-                  <p className="text-muted-foreground">
-                    No variants added yet.
-                  </p>
+                  <p className="text-muted-foreground">No variants added yet.</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Add variants if your product comes in different sizes,
-                    colors, or other options.
+                    Add variants if your product comes in different sizes, colors, or other options.
                   </p>
                   <Button className="mt-4 gap-2">
                     <Plus className="h-4 w-4" /> Add Your First Variant
@@ -805,15 +677,10 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
               </div>
 
               <div className="flex justify-between mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab("inventory")}
-                >
+                <Button variant="outline" onClick={() => setActiveTab("inventory")}>
                   Back to Inventory
                 </Button>
-                <Button onClick={() => setActiveTab("supplier")}>
-                  Continue to Supplier
-                </Button>
+                <Button onClick={() => setActiveTab("supplier")}>Continue to Supplier</Button>
               </div>
             </CardContent>
           </Card>
@@ -829,28 +696,15 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
 
                   <div className="space-y-2">
                     <Label htmlFor="supplier">Supplier Name</Label>
-                    <Select
-                      value={formData.supplier}
-                      onValueChange={(value) =>
-                        handleSelectChange("supplier", value)
-                      }
-                    >
+                    <Select value={formData.supplier} onValueChange={(value) => handleSelectChange("supplier", value)}>
                       <SelectTrigger id="supplier">
                         <SelectValue placeholder="Select supplier" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Tech Distributors">
-                          Tech Distributors
-                        </SelectItem>
-                        <SelectItem value="Office World">
-                          Office World
-                        </SelectItem>
-                        <SelectItem value="Global Supplies">
-                          Global Supplies
-                        </SelectItem>
-                        <SelectItem value="Premium Furniture">
-                          Premium Furniture
-                        </SelectItem>
+                        <SelectItem value="Tech Distributors">Tech Distributors</SelectItem>
+                        <SelectItem value="Office World">Office World</SelectItem>
+                        <SelectItem value="Global Supplies">Global Supplies</SelectItem>
+                        <SelectItem value="Premium Furniture">Premium Furniture</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -895,31 +749,18 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
                   <div className="space-y-2">
                     <Label htmlFor="invoiceDate">Invoice Date</Label>
                     <DatePicker
-                      date={
-                        formData.invoiceDate
-                          ? new Date(formData.invoiceDate)
-                          : undefined
-                      }
-                      onDateChange={(date) =>
-                        handleDateChange("invoiceDate", date)
-                      }
+                      date={formData.invoiceDate ? new Date(formData.invoiceDate) : undefined}
+                      onDateChange={(date) => handleDateChange("invoiceDate", date)}
                     />
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-between mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab("variants")}
-                >
+                <Button variant="outline" onClick={() => setActiveTab("variants")}>
                   Back to Variants
                 </Button>
-                <Button
-                  onClick={handleSave}
-                  className="gap-2"
-                  disabled={isSubmitting}
-                >
+                <Button onClick={handleSave} className="gap-2" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -937,7 +778,6 @@ const EditProductPage: FC<EditProductPageProps> = ({ params }) => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
+  )
+}
 
-export default EditProductPage;
