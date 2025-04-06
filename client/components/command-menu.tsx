@@ -99,41 +99,6 @@ export function CommandMenu({ ...props }: DialogProps) {
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="GST">
-            <CommandItem
-              onSelect={() =>
-                runCommand(() => router.push("/dashboard/gst/e-invoicing"))
-              }
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              <span>E-Invoicing</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() => router.push("/dashboard/gst/e-way-bill"))
-              }
-            >
-              <Truck className="mr-2 h-4 w-4" />
-              <span>E-Way Bill</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() => router.push("/dashboard/gst/gstr-filing"))
-              }
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              <span>GSTR Filing</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() => router.push("/dashboard/gst/returns"))
-              }
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              <span>GST Returns</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
           <CommandGroup heading="Business">
             <CommandItem
               onSelect={() => runCommand(() => router.push("/dashboard/sales"))}

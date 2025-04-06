@@ -430,7 +430,7 @@ export default function ViewProductPage({
           <DialogHeader>
             <DialogTitle>Delete Product</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{product.name}"? This action
+              Are you sure you want to delete &quot;{product.name}&quot;? This action
               cannot be undone.
             </DialogDescription>
           </DialogHeader>
@@ -454,7 +454,7 @@ export default function ViewProductPage({
           <DialogHeader>
             <DialogTitle>Adjust Stock</DialogTitle>
             <DialogDescription>
-              Update the stock quantity for "{product.name}"
+              Update the stock quantity for &quot;{product.name}&quot;
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

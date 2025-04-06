@@ -1,8 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { ShoppingCart, AlertTriangle, ImageOff } from "lucide-react";
+import {
+  ShoppingCart,
+  AlertTriangle,
+  Package,
+  Smartphone,
+  Shirt,
+  Coffee,
+  Utensils,
+  BookOpen,
+  Laptop,
+  Home,
+  Gift,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/contexts/inventory-context";
@@ -16,27 +26,35 @@ export function CompactProductCard({
   product,
   onAddToCart,
 }: CompactProductCardProps) {
-  // Client-side state for image loading
-  const [imageError, setImageError] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  // Only run on client side
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Determine stock status
   const isOutOfStock = product.quantity <= 0;
   const isLowStock =
     product.quantity > 0 && product.quantity <= product.reorderLevel;
 
-  // Default placeholder
-  const placeholderImage = "/placeholder.svg?height=80&width=80";
+  // Get appropriate icon based on product category
+  const getProductIcon = () => {
+    const category = product.category?.toLowerCase() || "";
 
-  // Use placeholder if image fails to load
-  const imageUrl = imageError
-    ? placeholderImage
-    : product.images[0] || placeholderImage;
+    if (category.includes("electronics") || category.includes("gadget")) {
+      return <Smartphone className="h-8 w-8" />;
+    } else if (category.includes("clothing") || category.includes("apparel")) {
+      return <Shirt className="h-8 w-8" />;
+    } else if (category.includes("food") || category.includes("grocery")) {
+      return <Coffee className="h-8 w-8" />;
+    } else if (category.includes("kitchen") || category.includes("dining")) {
+      return <Utensils className="h-8 w-8" />;
+    } else if (category.includes("book") || category.includes("stationery")) {
+      return <BookOpen className="h-8 w-8" />;
+    } else if (category.includes("computer") || category.includes("laptop")) {
+      return <Laptop className="h-8 w-8" />;
+    } else if (category.includes("home") || category.includes("furniture")) {
+      return <Home className="h-8 w-8" />;
+    } else if (category.includes("gift") || category.includes("toy")) {
+      return <Gift className="h-8 w-8" />;
+    } else {
+      return <Package className="h-8 w-8" />;
+    }
+  };
 
   return (
     <Card
@@ -49,23 +67,9 @@ export function CompactProductCard({
       }`}
     >
       <div className="flex h-full">
-        {/* Product Image - Full height */}
-        <div className="relative w-20 h-full flex-shrink-0 bg-muted">
-          {mounted ? (
-            <Image
-              src={imageUrl || "/placeholder.svg"}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="80px"
-              onError={() => setImageError(true)}
-              priority
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <ImageOff className="h-6 w-6 text-muted-foreground" />
-            </div>
-          )}
+        {/* Product Icon - Full height */}
+        <div className="w-20 h-full flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20">
+          {getProductIcon()}
         </div>
 
         {/* Product Details - Centered content */}

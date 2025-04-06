@@ -126,7 +126,7 @@ export default function GSTNManagementPage() {
           <div className="flex flex-col gap-4">
             <p className="text-sm text-muted-foreground">
               To add a new GSTN number, you need to verify it first. Click the
-              "Add GSTN" button above to start the verification process.
+              &quot;Add GSTN&quot; button above to start the verification process.
             </p>
             <div className="flex flex-col gap-2">
               <h3 className="text-sm font-medium">

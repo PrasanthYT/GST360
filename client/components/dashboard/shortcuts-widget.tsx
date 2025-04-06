@@ -52,21 +52,12 @@ export function ShortcutsWidget() {
       description: "Manage your products and stock levels",
     },
     {
-      id: "e-invoicing",
-      name: "E-Invoicing",
-      icon: FileText,
-      color:
-        "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400",
-      path: "/dashboard/gst/e-invoicing",
-      description: "Generate and manage GST e-invoices",
-    },
-    {
       id: "gstr-filing",
       name: "GSTR Filing",
       icon: Receipt,
       color:
         "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400",
-      path: "/dashboard/gst/gstr-filing",
+      path: "/dashboard/gst-compliance",
       description: "File your GST returns",
     },
     {

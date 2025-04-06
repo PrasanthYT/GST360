@@ -308,7 +308,7 @@ export function ProductList({
           <DialogHeader>
             <DialogTitle>Delete Product</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{selectedProduct?.name}"? This
+              Are you sure you want to delete &quot;{selectedProduct?.name}&quot;? This
               action cannot be undone.
             </DialogDescription>
           </DialogHeader>
@@ -332,7 +332,7 @@ export function ProductList({
           <DialogHeader>
             <DialogTitle>Adjust Stock</DialogTitle>
             <DialogDescription>
-              Update the stock quantity for "{selectedProduct?.name}"
+              Update the stock quantity for &quot;{selectedProduct?.name}&quot;
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

@@ -2355,7 +2355,7 @@ export default function GSTCompliancePage() {
                 Compliance Achievement Unlocked!
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
-                You've earned the "Timely Filer" badge for your GST compliance
+                You&apos;ve earned the &quot;Timely Filer&quot; badge for your GST compliance
                 efforts.
               </p>
               <div className="flex items-center justify-center mt-4">

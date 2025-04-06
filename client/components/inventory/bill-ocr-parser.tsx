@@ -313,8 +313,8 @@ export function BillOcrParser() {
                       Drag & drop invoice image or PDF, or click to browse
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      We'll automatically extract product data from your
-                      supplier's bill
+                      We&apos;ll automatically extract product data from your
+                      supplier&apos;s bill
                     </p>
                     <Input
                       type="file"
@@ -524,7 +524,7 @@ export function BillOcrParser() {
                 <AlertTriangle className="h-10 w-10 text-muted-foreground mb-4" />
                 <h3 className="font-medium text-lg">No Products Detected</h3>
                 <p className="text-muted-foreground mt-1">
-                  We couldn't detect any products in the bill. Try uploading a
+                  We couldn&apos;t detect any products in the bill. Try uploading a
                   clearer image.
                 </p>
               </div>

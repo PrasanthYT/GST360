@@ -99,7 +99,7 @@ export default function DashboardPage() {
               <div>
                 <h3 className="font-medium">Welcome back, Rahul!</h3>
                 <p className="text-sm text-muted-foreground">
-                  You're on a {streakCount}-day login streak! 🔥
+                  You&apos;re on a {streakCount}-day login streak! 🔥
                 </p>
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function DashboardPage() {
             </Badge>
           </div>
           <p className="text-muted-foreground text-sm md:text-base">
-            Welcome back! Here's an overview of your business performance.
+            Welcome back! Here&apos;s an overview of your business performance.
           </p>
         </div>
         <div className="flex items-center gap-2 w-full sm:w-auto">

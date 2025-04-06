@@ -299,7 +299,7 @@ export default function POSPage() {
                   <Package className="h-12 w-12 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-medium">No products found</h3>
                   <p className="text-muted-foreground mt-1">
-                    Try adjusting your search or filter to find what you're
+                    Try adjusting your search or filter to find what you&apos;re
                     looking for.
                   </p>
                 </div>

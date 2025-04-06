@@ -38,7 +38,7 @@ export function ProgressTracker() {
             <Gift className="mx-auto h-12 w-12 mb-2" />
             <h3 className="text-xl font-bold">Reward Claimed!</h3>
             <p className="text-sm opacity-90">
-              You've unlocked premium templates!
+              You&apos;ve unlocked premium templates!
             </p>
           </div>
         </motion.div>
